@@ -1,26 +1,38 @@
-package co.edu.unillanos.msg.domain;
+public package co.edu.unillanos.msg.domain;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
-/**
- * Gastos operativos anuales estimados de la MSG Foundation.
- * Rol responsable: Inversiones.
- */
-public final class OperatingExpenses {
+public final class Investment {
 
-    private final BigDecimal annualAmount;
+    private final String investmentId;
+    private final String description;
+    private final BigDecimal annualExpectedReturn;
 
-    public OperatingExpenses(BigDecimal annualAmount) {
-        this.annualAmount = Objects.requireNonNull(annualAmount);
+    public Investment(String investmentId, String description, BigDecimal annualExpectedReturn) {
+        this.investmentId = Objects.requireNonNull(investmentId);
+        this.description = Objects.requireNonNull(description);
+        this.annualExpectedReturn = Objects.requireNonNull(annualExpectedReturn);
     }
 
-    public BigDecimal annualAmount() {
-        return annualAmount;
+    public String investmentId() {
+        return investmentId;
     }
 
-    /** RN7: gasto anual repartido igual entre 52 semanas, con 2 decimales. */
-    public BigDecimal weeklyAmount() {
-        throw new UnsupportedOperationException("TODO");
+    public String description() {
+        return description;
     }
+
+    public BigDecimal annualExpectedReturn() {
+        return annualExpectedReturn;
+    }
+
+    /** RN6: rendimiento anual esperado / 52, en dólares con 2 decimales. */
+    public BigDecimal weeklyReturn() {
+        return annualExpectedReturn.divide(new BigDecimal("52"), 2, RoundingMode.HALF_EVEN);
+    }
+}
+ {
+    
 }

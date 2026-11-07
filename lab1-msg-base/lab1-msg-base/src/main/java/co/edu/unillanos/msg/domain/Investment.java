@@ -3,13 +3,6 @@ package co.edu.unillanos.msg.domain;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-/**
- * Inversión de la MSG Foundation.
- * Rol responsable: Inversiones.
- *
- * Decisión D3 (tomada, revisable): la clase está declarada final.
- * ¿La mantienen así? Anoten en la hoja una ventaja y un riesgo.
- */
 public final class Investment {
 
     private final String investmentId;
