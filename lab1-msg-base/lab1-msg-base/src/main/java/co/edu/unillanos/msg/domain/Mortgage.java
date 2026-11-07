@@ -11,7 +11,7 @@ import java.util.Objects;
 public final class Mortgage {
 
     private static final BigDecimal WEEKS_PER_YEAR = new BigDecimal("52");
-
+    private static final BigDecimal MAX_COUPLE_INCOME_PERCENTAGE = new BigDecimal("0.28");
     // TODO (RN4): declare aquí, una sola vez y con nombre, el porcentaje máximo
     //             del ingreso que aporta la pareja (28 %).
 
@@ -34,6 +34,9 @@ public final class Mortgage {
         this.coupleWeeklyIncome = Objects.requireNonNull(coupleWeeklyIncome);
         // TODO (R6): rechazar con IllegalArgumentException un ingreso semanal
         //            de la pareja menor o igual a cero.
+        if (coupleWeeklyIncome.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("El ingreso semanal de la pareja debe ser mayor a cero.");
+        }
     }
 
     public String mortgageNumber() {
@@ -48,21 +51,23 @@ public final class Mortgage {
 
     /** RN3: capital e intereses más el costo semanal de impuesto y seguro. */
     public BigDecimal totalWeeklyPayment() {
-        throw new UnsupportedOperationException("TODO");
+        return weeklyPrincipalAndInterest.add(weeklyEscrow());
     }
 
     /** RN4: lo máximo que la pareja aporta por semana. */
     public BigDecimal maxCoupleContribution() {
-        throw new UnsupportedOperationException("TODO");
+        return coupleWeeklyIncome.multiply(MAX_COUPLE_INCOME_PERCENTAGE)
+                .setScale(2, RoundingMode.HALF_EVEN);
     }
 
     /** RN5: lo que cubre la fundación; nunca es negativo. */
     public BigDecimal weeklyGrant() {
-        throw new UnsupportedOperationException("TODO");
+        BigDecimal difference = totalWeeklyPayment().subtract(maxCoupleContribution());
+        return difference.max(BigDecimal.ZERO) .setScale(2, RoundingMode.HALF_EVEN);
     }
 
     /** Lo que paga la pareja: cuota total menos subsidio. */
     public BigDecimal weeklyCoupleContribution() {
-        throw new UnsupportedOperationException("TODO");
+        return totalWeeklyPayment() .subtract(weeklyGrant());
     }
 }
